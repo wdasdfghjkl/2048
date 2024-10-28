@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    div {
+        margin: 0px auto;
+    }
+
+
+
+
+    .l {
+        width: 100px;
+        height: 100px;
+        list-style: none;
+        background-color: #ccc;
+        border-radius: 10px;
+        margin: 5px;
+        float: left;
+        position: relative;
+    }
+
+    .gs {
+        width: 100px;
+        height: 100px;
+        list-style: none;
+        background-color: #2ec6d1;
+        border-radius: 10px;
+        margin: 0px;
+        float: left;
+        position: absolute;
+        z-index: 1;
+        line-height: 100px;
+        text-align: center;
+        font-size: 30px;
+        font-family: 'Courier New', Courier, monospace;
+        color: aliceblue;
+        font-weight: 900;
+    }
+
+
+
+    .dad {
+        width: 420px;
+        background-color: #d7bb2f;
+        border-radius: 10px;
+        margin: 0px auto;
+        overflow: hidden;
+        border: #d7bb2f solid 5px;
+    }
+
+    button {
+        width: 200px;
+        height: 120px;
+        /* margin: 0px auto;
+        display: block; */
+        margin-top: 20px;
+        border-radius: 10px;
+        background-color: #d7bb2f;
+        border: none;
+        font-size: 20px;
+        float: left;
+        line-height: 120px;
+        text-align: center;
+    }
+</style>
+
+<body>
+    <button class="scores">
+        得分：0
+    </button>
+    <div class="dad">
+        <div class="l">
+            <div class="gs"></div>
+        </div>
+        <div class="l">
+            <div class="gs"></div>
+        </div>
+        <div class="l">
+            <div class="gs"></div>
+        </div>
+        <div class="l">
+            <div class="gs"></div>
+        </div>
+        <div class="l">
+            <div class="gs"></div>
+        </div>
+        <div class="l">
+            <div class="gs"></div>
+        </div>
+        <div class="l">
+            <div class="gs"></div>
+        </div>
+        <div class="l">
+            <div class="gs"></div>
+        </div>
+        <div class="l">
+            <div class="gs"></div>
+        </div>
+        <div class="l">
+            <div class="gs"></div>
+        </div>
+        <div class="l">
+            <div class="gs"></div>
+        </div>
+        <div class="l">
+            <div class="gs"></div>
+        </div>
+        <div class="l">
+            <div class="gs"></div>
+        </div>
+        <div class="l">
+            <div class="gs"></div>
+        </div>
+        <div class="l">
+            <div class="gs"></div>
+        </div>
+        <div class="l">
+            <div class="gs"></div>
+        </div>
+    </div>
+    <script>
+
+        // 设置dad的宽度
+        var l_class = document.getElementsByClassName("l")[0];
+        var l_width = window.getComputedStyle(l_class).getPropertyValue('width'); // 使用 getComputedStyle 获取宽度
+        var l_margin_width = window.getComputedStyle(l_class).getPropertyValue('margin-right');
+        l_width = parseFloat(l_width);
+        l_margin_width = parseFloat(l_margin_width);
+        var dad_class = document.getElementsByClassName("dad")[0];
+        dad_class.style.width = (l_width * 4 + l_margin_width * 8) + "px";
+
+        var l_1 = document.getElementsByClassName("gs");
+
+        var intervalId; // 存储定时器 ID
+
+        const biaoge_2048 = {
+            biaoge: [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]], //二维数组
+            biaoge_yd: [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]],
+            beixuan: [2, 2, 2, 4],
+            scores: 0, //分数
+            random_sc: function () {
+                var pd = true;
+                while (pd) {
+                    var x = Math.floor(Math.random() * 4);
+                    var y = Math.floor(Math.random() * 4);
+                    if (this.biaoge[x][y] == 0) {
+                        this.biaoge[x][y] = this.beixuan[Math.floor(Math.random() * 4)];
+                        pd = false;
+                    }
+                }
+            },
+            yidong: function (yd) {
+                let pd = 0;
+                this.biaoge_yd = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]];
+
+                switch (yd) {
+                    case 'w':
+                        {
+                            for (let i = 1; i < 4; i++) {
+                                for (let j = 0; j < 4; j++) {
+                                    let x = i, y = j;
+                                    while (1) {
+                                        if (this.biaoge[x][y] == 0) { break; }
+                                        if (x > 0 && this.biaoge[x - 1][y] == 0) {
+                                            this.biaoge[x - 1][y] = this.biaoge[x][y];
+                                            this.biaoge[x][y] = 0;
+                                            x--;
+                                            pd++;
+                                            this.biaoge_yd[i][j]++; //记录移动次数
+                                        }
+                                        else if (x > 0 && this.biaoge[x - 1][y] == this.biaoge[x][y]) {
+                                            this.biaoge[x - 1][y] += this.biaoge[x][y];
+                                            this.scores += this.biaoge[x][y];
+                                            this.biaoge[x][y] = 0;
+                                            x--;
+                                            pd++;
+                                            this.biaoge_yd[i][j]++;
+                                            break;
+                                        }
+                                        else {
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+                        }
+                    case 's':
+                        {
+                            for (let i = 1; i < 4; i++) {
+                                for (let j = 0; j < 4; j++) {
+                                    let x = i, y = j;
+                                    while (1) {
+                                        if (this.biaoge[3 - x][y] == 0) { break; }
+                                        if (3 - x < 3 && this.biaoge[3 - (x - 1)][y] == 0) {
+                                            this.biaoge[3 - (x - 1)][y] = this.biaoge[3 - x][y];
+                                            this.biaoge[3 - x][y] = 0;
+                                            x--;
+                                            pd++;
+                                            this.biaoge_yd[3 - i][j]++;
+                                        }
+                                        else if (3 - x < 3 && this.biaoge[3 - (x - 1)][y] == this.biaoge[3 - x][y]) {
+                                            this.biaoge[3 - (x - 1)][y] += this.biaoge[3 - x][y];
+                                            this.scores += this.biaoge[3 - x][y];
+                                            this.biaoge[3 - x][y] = 0;
+                                            x--;
+                                            pd++;
+                                            this.biaoge_yd[3 - i][j]++;
+                                            break;
+                                        }
+                                        else {
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+                        }
+                    case 'a':
+                        {
+                            for (let j = 1; j < 4; j++) {
+                                for (let i = 0; i < 4; i++) {
+                                    let x = i, y = j;
+                                    while (1) {
+                                        if (this.biaoge[x][y] == 0) { break; }
+                                        if (y > 0 && this.biaoge[x][y - 1] == 0) {
+                                            this.biaoge[x][y - 1] = this.biaoge[x][y];
+                                            this.biaoge[x][y] = 0;
+                                            y--;
+                                            pd++;
+                                            this.biaoge_yd[i][j]++;
+                                        }
+                                        else if (y > 0 && this.biaoge[x][y - 1] == this.biaoge[x][y]) {
+                                            this.biaoge[x][y - 1] += this.biaoge[x][y];
+                                            this.scores += this.biaoge[x][y];
+                                            this.biaoge[x][y] = 0;
+                                            y--;
+                                            pd++;
+                                            this.biaoge_yd[i][j]++;
+                                            break;
+                                        }
+                                        else {
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+                        }
+                    case 'd':
+                        {
+                            for (let j = 1; j < 4; j++) {
+                                for (let i = 0; i < 4; i++) {
+                                    let x = i, y = j;
+                                    while (1) {
+                                        if (this.biaoge[x][3 - y] == 0) { break; }
+                                        if (3 - y < 3 && this.biaoge[x][3 - (y - 1)] == 0) {
+                                            this.biaoge[x][3 - (y - 1)] = this.biaoge[x][3 - y];
+                                            this.biaoge[x][3 - y] = 0;
+                                            y--;
+                                            pd++;
+                                            this.biaoge_yd[i][3 - j]++;
+                                        }
+                                        else if (y > 0 && this.biaoge[x][3 - (y - 1)] == this.biaoge[x][3 - y]) {
+                                            this.biaoge[x][3 - (y - 1)] += this.biaoge[x][3 - y];
+                                            this.scores += this.biaoge[x][3 - y];
+                                            this.biaoge[x][3 - y] = 0;
+                                            y--;
+                                            pd++;
+                                            this.biaoge_yd[i][3 - j]++;
+                                            break;
+                                        }
+                                        else {
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+                        }
+                    default: break;
+                }
+
+                console.log("没有移动");
+                return pd;
+
+            },
+
+        };
+
+
+        const n_color = ["#5F6FD9", "#4A90E2", "#2196F3", "#42A5F5", "#64B5F6", "#90CAF9", "#BBDEFB", "#E3F2FD", "#FFC107", "#FFEB3B", "#FFD54F", "#FFCA28", "#FFE082", "#FFF59D", "#ccc", "#FF0000"]; //颜色
+        for (let i = 0; i < 16; i++) {
+            l_1[i].style.backgroundColor = n_color[i];
+        }
+        //根据大小设置颜色
+        function setColor() {
+            let s_n = [...biaoge_2048.biaoge[0], ...biaoge_2048.biaoge[1], ...biaoge_2048.biaoge[2], ...biaoge_2048.biaoge[3]];
+            for (let i = 0; i < s_n.length; i++) {
+                if (s_n[i] != 0) {
+                    l_1[i].innerHTML = s_n[i];
+                }
+                else {
+                    l_1[i].innerHTML = "";
+                }
+                switch (s_n[i]) {
+                    case 2: {
+                        l_1[i].style.backgroundColor = n_color[0];
+                        break;
+                    }
+                    case 4: {
+                        l_1[i].style.backgroundColor = n_color[1];
+                        break;
+                    }
+                    case 8: {
+                        l_1[i].style.backgroundColor = n_color[2];
+                        break;
+                    }
+                    case 16: {
+                        l_1[i].style.backgroundColor = n_color[3];
+                        break;
+                    }
+                    case 32: {
+                        l_1[i].style.backgroundColor = n_color[4];
+                        break;
+                    }
+                    case 64: {
+                        l_1[i].style.backgroundColor = n_color[5];
+                        break;
+                    }
+                    case 128: {
+                        l_1[i].style.backgroundColor = n_color[6];
+                        break;
+                    }
+                    case 256: {
+                        l_1[i].style.backgroundColor = n_color[7];
+                        break;
+                    }
+                    case 512: {
+                        l_1[i].style.backgroundColor = n_color[8];
+                        break;
+                    }
+                    case 1024: {
+                        l_1[i].style.backgroundColor = n_color[9];
+                        break;
+                    }
+                    case 2048: {
+                        l_1[i].style.backgroundColor = n_color[10];
+                        break;
+                    }
+                    default: {
+                        l_1[i].style.backgroundColor = n_color[14];
+                    }
+                }
+            }
+        }
+
+
+        function move(l_1, direction, s_length) {
+            var currentLeft = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            var currentTop = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+            // 获取总移动距离
+            let all = 0;
+            for (let i in s_length) {
+                all += s_length[i];
+                console.log(all);
+            }
+
+            // 重置z-index
+            for (let i = 0; i < l_1.length; i++) {
+                l_1[i].style.zIndex = 1;
+            }
+
+
+            clearInterval(intervalId); // 清除之前的定时器
+            intervalId = setInterval(function () {
+                if (all == 0) {
+                    clearInterval(intervalId);
+                    //重置位置
+                    for (let i = 0; i < l_1.length; i++) {
+                        l_1[i].style.left = 0 + 'px';
+                        l_1[i].style.top = 0 + 'px';
+                        l_1[i].style.zIndex = 1;
+                        currentLeft[i] = 0;
+                        currentTop[i] = 0;
+                    }
+                    setColor();
+                    console.log("end");
+                    return;
+                }
+                for (let i = 0; i < s_length.length; i++) {
+                    if (Math.abs(currentLeft[i]) >= 110 * s_length[i] || Math.abs(currentTop[i]) >= 110 * s_length[i]) {
+                        all -= s_length[i]; // 减少剩余移动距离
+                        continue;
+                    }
+                    if (s_length[i] == 0) { continue; }
+                    l_1[i].style.zIndex = 3;
+                    switch (direction) {
+                        case "left":
+                            currentLeft[i] -= 2 * s_length[i];
+                            break;
+                        case "right":
+                            currentLeft[i] += 2 * s_length[i];
+                            break;
+                        case "up":
+                            currentTop[i] -= 2 * s_length[i];
+                            break;
+                        case "down":
+                            currentTop[i] += 2 * s_length[i];
+                            break;
+                    }
+                    l_1[i].style.left = currentLeft[i] + 'px';
+                    l_1[i].style.top = currentTop[i] + 'px';
+                }
+            }, 1);
+
+
+        }
+
+        function biaogeToGraph(direction) {
+
+            let s_length = [...biaoge_2048.biaoge_yd[0], ...biaoge_2048.biaoge_yd[1], ...biaoge_2048.biaoge_yd[2], ...biaoge_2048.biaoge_yd[3]]; //将二维数组转换为一维数组
+            console.log(JSON.stringify(biaoge_2048.biaoge_yd[0]));
+            console.log(JSON.stringify(biaoge_2048.biaoge_yd[1]));
+            console.log(JSON.stringify(biaoge_2048.biaoge_yd[2]));
+            console.log(JSON.stringify(biaoge_2048.biaoge_yd[3]));
+            move(l_1, direction, s_length);
+
+        }
+
+        biaoge_2048.random_sc();
+        console.log(JSON.stringify(biaoge_2048.biaoge));
+        setColor();
+        var button_scores = document.getElementsByClassName('scores')[0];
+        document.onkeydown = function (e) {
+            let pd = 0;//判断是否可以移动
+            switch (e.keyCode) {
+                case 37: {
+                    pd = biaoge_2048.yidong('a');
+                    if (pd == 0) {
+                        //alert('不能移动');
+                        break;
+                    }
+                    biaoge_2048.random_sc();
+                    console.log(JSON.stringify(biaoge_2048.biaoge));
+                    biaogeToGraph('left');
+                    //setColor();
+                    break;
+                }
+                case 38: {
+                    pd = biaoge_2048.yidong('w');
+                    if (pd == 0) {
+                        //alert('不能移动');
+                        break;
+                    }
+                    biaoge_2048.random_sc();
+                    console.log(JSON.stringify(biaoge_2048.biaoge));
+                    biaogeToGraph('up');
+                    //setColor();
+                    break;
+                }
+                case 39: {
+                    pd = biaoge_2048.yidong('d');
+                    if (pd == 0) {
+                        //alert('不能移动');
+                        break;
+                    }
+                    biaoge_2048.random_sc();
+                    console.log(JSON.stringify(biaoge_2048.biaoge));
+                    biaogeToGraph('right');
+                    //setColor();
+                    break;
+                }
+                case 40: {
+                    pd = biaoge_2048.yidong('s');
+                    if (pd == 0) {
+                        //alert('该方向不能移动');
+                        break;
+                    }
+                    biaoge_2048.random_sc();
+                    console.log(JSON.stringify(biaoge_2048.biaoge));
+                    biaogeToGraph('down');
+                    //setColor();
+                    break;
+                }
+                default: {
+                    break;
+                }
+
+
+            }
+            button_scores.innerHTML = "得分：" + biaoge_2048.scores;
+        };
+
+        button_scores.addEventListener("click", function () {
+            alert("按钮被点击了！");
+            location.reload();
+        });
+
+    </script>
+</body>
+
+</html>
