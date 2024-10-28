@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    #div1 {
+        width: 100px;
+        height: 100px;
+        background-color: red;
+        position: relative;
+    }
+
+    button {
+        background-color: blue;
+        width: 200px;
+        height: 100px;
+    }
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<body>
+    <div id="div1"></div>
+    <button></button>
+</body>
+<script>
+    document.getElementsByTagName("button")[0].addEventListener("click", function () {
+        console.log("hello");
+        $("#div1").animate({
+            left: '250px',
+            opacity: '0.5',
+
+        });
+    })
+
+
+</script>
+
+</html>
