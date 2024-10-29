@@ -173,6 +173,7 @@
 <script src="jquery-3.7.1.min.js"></script>
 
 <script>
+    document.body.style.overflow = 'hidden'; // 隐藏滚动条
 
     // 设置dad的宽度
     var l_class = document.getElementsByClassName("l")[0];
@@ -662,6 +663,7 @@
             default:
                 break;
         }
+        button_scores.innerHTML = "得分：" + biaoge_2048.scores;
     }, { passive: false });
 
     button_scores.addEventListener("click", function () {
