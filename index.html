@@ -170,7 +170,7 @@
     </ul>
 </body>
 <!-- 使用 jQuery CDN 引入 -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="jquery-3.7.1.min.js"></script>
 
 <script>
 
@@ -599,7 +599,7 @@
     document.addEventListener("touchstart", function (e) {
         startx = e.touches[0].pageX;
         starty = e.touches[0].pageY;
-    }, false);
+    }, { passive: false });
 
     //手指离开屏幕
     document.addEventListener("touchend", function (e) {
@@ -662,7 +662,7 @@
             default:
                 break;
         }
-    }, false);
+    }, { passive: false });
 
     button_scores.addEventListener("click", function () {
         alert("游戏结束！");
