@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Game_2048</title>
 </head>
 
 <style>
@@ -12,12 +12,6 @@
         margin: 0;
         padding: 0;
     }
-
-    div {
-        margin: 0px auto;
-    }
-
-
 
 
     .l {
@@ -55,7 +49,7 @@
         width: 420px;
         background-color: #d7bb2f;
         border-radius: 10px;
-        margin: 10px 220px;
+        margin: 10px 150px;
         overflow: hidden;
         border: #d7bb2f solid 5px;
         display: inline-block;
@@ -71,13 +65,12 @@
         background-color: #d7bb2f;
         border: none;
         font-size: 20px;
-        float: left;
         line-height: 120px;
         text-align: center;
     }
 
     ul {
-        display: inline-block;
+        /* display: inline-block; */
         width: 300px;
         list-style: none;
         background-color: #addc5b;
@@ -99,12 +92,49 @@
         line-height: 30px;
         text-align: center;
     }
+
+    .danyuange {
+        float: left;
+        width: 100px;
+        height: 100px;
+    }
+
+    .b {
+        background-color: rgb(234, 158, 19);
+        width: 100px;
+        height: 100px;
+        border-radius: 10px;
+        line-height: 100px;
+        text-align: center;
+    }
+
+    #leftside {
+        display: inline-block;
+    }
+
+    .button_group {
+        display: inline-block;
+    }
 </style>
 
 <body>
-    <button class="scores">
-        得分：0
-    </button>
+    <div id="leftside">
+        <button class="scores">
+            得分：0
+        </button>
+        <ul>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
     <div class="dad">
         <div class="l">
             <div class="gs"></div>
@@ -156,18 +186,28 @@
         </div>
     </div>
 
-    <ul>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-    </ul>
+    <div class="button_group">
+        <div class="danyuange">
+        </div>
+        <div class="danyuange">
+            <button id="w" class="b">上</button>
+        </div>
+        <div class="danyuange">
+        </div>
+        <div class="danyuange">
+            <button id="a" class="b">左</button>
+        </div>
+        <div class="danyuange">
+        </div>
+        <div class="danyuange">
+            <button id="d" class="b">右</button>
+        </div>
+        <div class="danyuange"></div>
+        <div class="danyuange">
+            <button id="s" class="b">下</button>
+        </div>
+        <div class="danyuange"></div>
+    </div>
 </body>
 <!-- 使用 jQuery CDN 引入 -->
 <script src="jquery-3.7.1.min.js"></script>
@@ -184,9 +224,13 @@
     var dad_class = document.getElementsByClassName("dad")[0];
     dad_class.style.width = (l_width * 4 + l_margin_width * 8) + "px";
 
+    // 设置button_group的宽度
+    $(document).ready(function () {
+        $(".button_group").width($(".danyuange").width() * 3);
+    })
+
     var l_1 = document.getElementsByClassName("gs");
 
-    var intervalId; // 存储定时器 ID
 
     const biaoge_2048 = {
         biaoge: [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]], //二维数组
@@ -564,6 +608,45 @@
         }
         button_scores.innerHTML = "得分：" + biaoge_2048.scores;
     };
+
+    $('#a').click(function () {
+        pd = biaoge_2048.yidong('a');
+        if (pd != 0) {
+            biaoge_2048.random_sc();
+            console.log(JSON.stringify(biaoge_2048.biaoge));
+            biaogeToGraph('left');
+            button_scores.innerHTML = "得分：" + biaoge_2048.scores;
+        }
+    })
+    $('#w').click(function () {
+        pd = biaoge_2048.yidong('w');
+        if (pd != 0) {
+            biaoge_2048.random_sc();
+            console.log(JSON.stringify(biaoge_2048.biaoge));
+            biaogeToGraph('up');
+            button_scores.innerHTML = "得分：" + biaoge_2048.scores;
+        }
+    })
+    $('#s').click(function () {
+        pd = biaoge_2048.yidong('s');
+        if (pd != 0) {
+            biaoge_2048.random_sc();
+            console.log(JSON.stringify(biaoge_2048.biaoge));
+            biaogeToGraph('down');
+            button_scores.innerHTML = "得分：" + biaoge_2048.scores;
+        }
+    })
+    $('#d').click(function () {
+        pd = biaoge_2048.yidong('d');
+        if (pd != 0) {
+            biaoge_2048.random_sc();
+            console.log(JSON.stringify(biaoge_2048.biaoge));
+            biaogeToGraph('right');
+            button_scores.innerHTML = "得分：" + biaoge_2048.scores;
+        }
+    })
+
+
 
     var startx, starty;
 

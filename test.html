@@ -7,33 +7,63 @@
     <title>Document</title>
 </head>
 <style>
-    #div1 {
-        width: 100px;
-        height: 100px;
-        background-color: red;
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    div {
+        width: 200px;
+        height: 200px;
+        background-color: rgba(0, 0, 0, 0);
         position: relative;
+    }
+
+    .l {
+        float: left;
+    }
+
+    .button_group {
+        width: 900px;
     }
 
     button {
         background-color: blue;
         width: 200px;
-        height: 100px;
+        height: 200px;
+        border-radius: 10px;
     }
 </style>
 <script src="jquery-3.7.1.min.js"></script>
 
 <body>
-    <div id="div1"></div>
-    <button></button>
+    <div class="button_group">
+        <div class="l">
+        </div>
+        <div class="l">
+            <button id="w"></button>
+        </div>
+        <div class="l">
+        </div>
+        <div class="l">
+            <button id="a"></button>
+        </div>
+        <div class="l">
+            <button></button>
+        </div>
+        <div class="l">
+            <button id="d"></button>
+        </div>
+        <div class="l"></div>
+        <div class="l">
+            <button id="s"></button>
+        </div>
+        <div class="l"></div>
+    </div>
 </body>
 <script>
-    document.getElementsByTagName("button")[0].addEventListener("click", function () {
-        console.log("hello");
-        $("#div1").animate({
-            left: '250px',
-            opacity: '0.5',
-
-        });
+    $(document).ready(function () {
+        $(".button_group").width($(".l").width() * 3);
     })
 
 
